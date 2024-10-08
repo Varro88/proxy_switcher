@@ -1,25 +1,20 @@
 {
-    "manifest_version": 2,
+    "manifest_version": 3,
     "name": "ProxySwitcher",
     "version": "0.1",
     "description": "Turn proxy on/off",
     "icons": {
         "48": "icons/green-circle-icon.png"
     },
-    "browser_action": {
+    "action": {
         "default_icon": "icons/green-circle-icon.png",
         "default_title": "Proxy off"
     },
-    "permissions": ["proxy"],
+    "permissions": ["proxy", "privacy"],
+    "incognito": "spanning",
     "background": {
         "scripts": [
             "background.js"
         ]
-    },
-    "browser_specific_settings": {
-        "gecko": {
-            "id": "cbf5e3a06f91623a7e31ea3c5ea8f84b721519d3@temporary-addon",
-            "strict_min_version": "91.1.0"
-        }
     }
 }

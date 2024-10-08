@@ -1,20 +1,20 @@
 function updateUI(isProxyEnabled) {
     if (isProxyEnabled) {
-        browser.browserAction.setIcon({
+        browser.action.setIcon({
             path: {
                 "48": '/icons/red-circle-icon.png'
             }
         });
-        browser.browserAction.setTitle({ title: "Proxy is ON" });
+        browser.action.setTitle({ title: "Proxy is ON" });
         console.log("Proxy is set");
     }
     else {
-        browser.browserAction.setIcon({
+        browser.action.setIcon({
             path: {
                 "48": '/icons/green-circle-icon.png'
             }
         });
-        browser.browserAction.setTitle({ title: "Proxy is OFF" });
+        browser.action.setTitle({ title: "Proxy is OFF" });
         console.log("No proxy");
     }
 }
@@ -25,6 +25,13 @@ async function getProxyState() {
 }
 
 async function switchProxyState() {
+
+    let isAllowed = await browser.extension.isAllowedIncognitoAccess();
+    if(!isAllowed) {
+        console.warn(`Allow using extension in private mode: Context menu -> Manage extension -> Allow for Private Windows`);
+        return;
+    }
+
     let proxySettings = await getProxyState();
     if (proxySettings.proxyType == "none") {
         proxySettings.proxyType = "manual";
@@ -50,11 +57,10 @@ async function switchProxyState() {
     }
 }
 
-
 async function init() {
     let proxySettings = await getProxyState();
     updateUI(proxySettings.proxyType != "none");
 }
 
-browser.browserAction.onClicked.addListener(switchProxyState);
+browser.action.onClicked.addListener(switchProxyState);
 browser.runtime.onInstalled.addListener(init);
